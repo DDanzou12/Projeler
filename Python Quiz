@@ -1,0 +1,77 @@
+print("\033[1;32mDoğru!\033[0m")   # Yeşil renkli metin
+print("\033[1;31mYanlış!\033[0m")   # Kırmızı renkli metin
+
+
+
+import random
+
+sorular = [
+    {"soru": "Python hangi yılda çıkmıştır?", "secenekler": ["1989", "1991", "2000", "2010"], "cevap": "1991"},
+    {"soru": "Aşağıdakilerden hangisi Python'da veri tipi değildir?", "secenekler": ["list", "tuple", "integer", "loop"], "cevap": "loop"},
+    {"soru": "print(2 ** 3) çıktısı nedir?", "secenekler": ["6", "8", "9", "12"], "cevap": "8"},
+    {"soru": "Python'da yorum satırı nasıl başlar?", "secenekler": ["//", "/* */", "#", "<!-- -->"], "cevap": "#"},
+    {"soru": "len([1,2,3,4]) çıktısı nedir?", "secenekler": ["3", "4", "5", "Hata verir"], "cevap": "4"},
+    {"soru": "Python hangi programlama paradigmasını destekler?", "secenekler": ["Nesne tabanlı", "Fonksiyonel", "Yordamsal", "Hepsi"], "cevap": "Hepsi"},
+    {"soru": "Hangisi Python'da mantıksal operatördür?", "secenekler": ["and", "or", "not", "Hepsi"], "cevap": "Hepsi"},
+    {"soru": "input() fonksiyonu ne yapar?", "secenekler": ["Ekrana yazı yazar", "Kullanıcıdan veri alır", "Programı bitirir", "Liste oluşturur"], "cevap": "Kullanıcıdan veri alır"},
+    {"soru": "Python dosya uzantısı nedir?", "secenekler": [".java", ".py", ".cpp", ".txt"], "cevap": ".py"},
+    {"soru": "Python'da '==' ne işe yarar?", "secenekler": ["Atama yapar", "Mod alır", "Eşit mi kontrol eder", "Döngü başlatır"], "cevap": "Eşit mi kontrol eder"}
+]
+
+puan = 0
+kullanici_cevaplari = []
+
+for soru in sorular:
+    print("\n" + soru["soru"])  # Beyaz soru
+    secenekler = soru["secenekler"].copy()
+    random.shuffle(secenekler)
+
+    harfler = ["A", "B", "C", "D"]
+    secenek_haritasi = {harfler[i]: secenek for i, secenek in enumerate(secenekler)}
+
+    for i, secenek in enumerate(secenekler):
+        print(f"{harfler[i]}) {secenek}")  # Beyaz seçenekler
+
+    while True:
+        cevap = input("Cevabınız (A/B/C/D): ").strip().upper()
+        if cevap in secenek_haritasi:
+            kullanici_cevaplari.append(secenek_haritasi[cevap])
+            break
+        else:
+            print("Geçersiz seçim. Lütfen A, B, C veya D girin.")
+
+# Test bitti, sonuçları hesapla
+for i, soru in enumerate(sorular):
+    if kullanici_cevaplari[i] == soru["cevap"]:
+        puan += 10
+    else:
+        puan -= 5
+
+maks_puan = len(sorular) * 10
+basari_yuzdesi = max(0, (puan / maks_puan) * 100)
+
+print("\n🏆 Quiz Bitti!")
+print(f"Toplam Puanınız: {puan}/{maks_puan}")
+print(f"Başarı Oranınız: %{basari_yuzdesi:.0f}")
+print("🎉 Tebrikler, geçtiniz!" if puan >= maks_puan * 0.6 else "😢 Maalesef, başarısız oldunuz.")
+
+# Cevap anahtarı ve kullanıcı cevapları
+print("\nCevap Anahtarı ve Senin Cevapların:")
+for i, soru in enumerate(sorular):
+    secenekler = soru["secenekler"]
+    dogru_harf = next(harf for harf, sec in zip(["A","B","C","D"], secenekler) if sec == soru["cevap"])
+    kullanici_harf = next((harf for harf, sec in zip(["A","B","C","D"], secenekler) if sec == kullanici_cevaplari[i]), None)
+    
+    # Doğru veya yanlış kontrolü ve renk
+    if kullanici_cevaplari[i] == soru["cevap"]:
+        sonuc = "\033[1;32mDoğru!\033[0m"  # Yeşil
+    else:
+        sonuc = "\033[1;31mYanlış!\033[0m" # Kırmızı
+    
+    # Cevap harfleri mavi (Azul)
+    dogru_harf_mavi = f"\033[1;34m{dogru_harf}\033[0m"
+    kullanici_harf_mavi = f"\033[1;34m{kullanici_harf}\033[0m"
+    
+    print(f"{i+1}) {sonuc} Doğru: {dogru_harf_mavi}, Senin cevabın: {kullanici_harf_mavi}")
+
+input("\nProgramı kapatmak için Enter tuşuna basın...")
