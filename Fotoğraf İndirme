@@ -1,0 +1,36 @@
+import os
+import requests
+from urllib.parse import urlparse, parse_qs, unquote
+import webbrowser
+import time
+
+desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+
+url = input("Google imgres linki girin: ")
+
+parsed = urlparse(url)
+params = parse_qs(parsed.query)
+
+if "imgurl" in params:
+    img_url = unquote(params["imgurl"][0])
+    print(f"Gerçek resim linki: {img_url}")
+
+    response = requests.get(img_url, headers={"User-Agent": "Mozilla/5.0"})
+    if response.status_code == 200 and "image" in response.headers.get("Content-Type", ""):
+        filename = os.path.basename(urlparse(img_url).path)
+        if not filename:
+            filename = f"resim_{int(time.time())}.jpg"
+
+        file_path = os.path.join(desktop_path, filename)
+        with open(file_path, "wb") as f:
+            f.write(response.content)
+
+        print(f"[+] {filename} indirildi ve Masaüstüne kaydedildi.")
+        webbrowser.open(img_url)  # tarayıcıda aç
+
+    else:
+        print("Resim indirilemedi!")
+else:
+    print("Geçerli bir Google imgres linki girin.")
+
+input("İşlem tamamlandı, resim masaüstünüze eklendi, çıkmak için Enter'a basın...")
