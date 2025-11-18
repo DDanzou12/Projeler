@@ -1,1 +1,83 @@
+import os
+import requests
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin, urlparse
+import uuid
+
+def clean_filename(url):
+    parsed = urlparse(url)
+    filename = os.path.basename(parsed.path)
+    if "." not in filename:
+        return None
+    return filename
+
+def download_images(url):
+    desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+    save_folder = os.path.join(desktop_path, "Yüklenen Resimler")
+
+    if not os.path.exists(save_folder):
+        os.makedirs(save_folder)
+
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+    except Exception as e:
+        print(f"URL alınamadı: {e}")
+        return False
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    img_tags = soup.find_all("img")
+    print(f"Bulunan img etiketi: {len(img_tags)}")
+
+    count = 0
+    for img in img_tags:
+        img_url = img.get("src")
+        if not img_url:
+            continue
+        img_url = urljoin(url, img_url)
+        if not any(ext in img_url.lower() for ext in [".jpg", ".png", ".jpeg", ".gif", ".webp"]):
+            continue
+
+        filename = clean_filename(img_url)
+        if filename is None:
+            filename = str(uuid.uuid4()) + ".jpg"
+
+        unique_name = str(uuid.uuid4()) + "_" + filename
+        file_path = os.path.join(save_folder, unique_name)
+
+        try:
+            img_data = requests.get(img_url).content
+            with open(file_path, "wb") as f:
+                f.write(img_data)
+            count += 1
+        except Exception as e:
+            print(f"HATA → {img_url} indirilemedi | {e}")
+
+    print(f"\nTamamlandı! {count} resim indirildi.")
+    print(f"Kayıt klasörü: {save_folder}\n")
+    return True
+
+# ---- ANA PROGRAM ----
+while True:
+    while True:
+        url = input("Resimlerini indirmek istediğiniz URL: ").strip()
+        if not url:
+            print("Anlayamadım, lütfen tekrar giriniz.")
+            continue
+        if download_images(url):
+            break
+        else:
+            print("URL geçersiz veya resim alınamadı, lütfen tekrar giriniz.")
+
+    # e/h devam sorusu
+    while True:
+        devam = input("Yeni bir işlem yapmak ister misiniz? (e/h): ").lower()
+        if devam in ["e", "evet"]:
+            break
+        elif devam in ["h", "hayır", "no", "n"]:
+            print("Program kapatılıyor...")
+            input("Program tamamlandı, kapatmak için Enter'a basın...")
+            exit()
+        else:
+            print("Anlayamadım, lütfen tekrar giriniz.")
 
