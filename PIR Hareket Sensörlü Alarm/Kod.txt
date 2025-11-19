@@ -1,0 +1,38 @@
+// Pin tanımlamaları
+const int pirPin = 2;      // PIR OUT
+const int ledPin = 13;     // LED
+const int buzzerPin = 9;   // Aktif buzzer
+
+void setup() {
+  pinMode(pirPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+  pinMode(buzzerPin, OUTPUT);
+
+  // Başlangıçta LED ve buzzer kapalı
+  digitalWrite(ledPin, LOW);
+  digitalWrite(buzzerPin, LOW);
+
+  Serial.begin(9600);
+
+  // PIR sensör stabilizasyon süresi
+  Serial.println("PIR güvenlik sistemi başlıyor, lütfen bekleyin...");
+  delay(3000); // PIR ilk tetiklemelerde hatalı okumamaları için 3 saniye bekle
+  Serial.println("Hazır!");
+}
+
+void loop() {
+  int hareket = digitalRead(pirPin); // PIR okuma
+
+  if (hareket == HIGH) {
+    // Hareket algılandı
+    Serial.println("Hareket algilandi!");
+    digitalWrite(ledPin, HIGH);     // LED yan
+    digitalWrite(buzzerPin, HIGH);  // Buzzer öt
+  } else {
+    // Hareket yok
+    digitalWrite(ledPin, LOW);      // LED sön
+    digitalWrite(buzzerPin, LOW);   // Buzzer sus
+  }
+
+  delay(50); // sensör okuma stabilizasyonu
+}
