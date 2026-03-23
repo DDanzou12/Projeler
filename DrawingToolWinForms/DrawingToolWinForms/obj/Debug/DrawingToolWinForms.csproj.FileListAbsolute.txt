@@ -1,0 +1,8 @@
+C:\Users\etezlcladmin\Desktop\DrawingToolWinForms\DrawingToolWinForms\bin\Debug\DrawingToolWinForms.exe
+C:\Users\etezlcladmin\Desktop\DrawingToolWinForms\DrawingToolWinForms\bin\Debug\DrawingToolWinForms.pdb
+C:\Users\etezlcladmin\Desktop\DrawingToolWinForms\DrawingToolWinForms\obj\Debug\DrawingToolWinForms.csproj.AssemblyReference.cache
+C:\Users\etezlcladmin\Desktop\DrawingToolWinForms\DrawingToolWinForms\obj\Debug\DrawingToolWinForms.MainForm.resources
+C:\Users\etezlcladmin\Desktop\DrawingToolWinForms\DrawingToolWinForms\obj\Debug\DrawingToolWinForms.csproj.GenerateResource.cache
+C:\Users\etezlcladmin\Desktop\DrawingToolWinForms\DrawingToolWinForms\obj\Debug\DrawingToolWinForms.csproj.CoreCompileInputs.cache
+C:\Users\etezlcladmin\Desktop\DrawingToolWinForms\DrawingToolWinForms\obj\Debug\DrawingToolWinForms.exe
+C:\Users\etezlcladmin\Desktop\DrawingToolWinForms\DrawingToolWinForms\obj\Debug\DrawingToolWinForms.pdb
