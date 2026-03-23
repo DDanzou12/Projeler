@@ -1,0 +1,14 @@
+C:\Users\etezlcladmin\Desktop\SnakeGameDesktop\bin\Debug\net8.0-windows\SnakeGameDesktop.exe
+C:\Users\etezlcladmin\Desktop\SnakeGameDesktop\bin\Debug\net8.0-windows\SnakeGameDesktop.deps.json
+C:\Users\etezlcladmin\Desktop\SnakeGameDesktop\bin\Debug\net8.0-windows\SnakeGameDesktop.runtimeconfig.json
+C:\Users\etezlcladmin\Desktop\SnakeGameDesktop\bin\Debug\net8.0-windows\SnakeGameDesktop.dll
+C:\Users\etezlcladmin\Desktop\SnakeGameDesktop\bin\Debug\net8.0-windows\SnakeGameDesktop.pdb
+C:\Users\etezlcladmin\Desktop\SnakeGameDesktop\obj\Debug\net8.0-windows\SnakeGameDesktop.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\etezlcladmin\Desktop\SnakeGameDesktop\obj\Debug\net8.0-windows\SnakeGameDesktop.AssemblyInfoInputs.cache
+C:\Users\etezlcladmin\Desktop\SnakeGameDesktop\obj\Debug\net8.0-windows\SnakeGameDesktop.AssemblyInfo.cs
+C:\Users\etezlcladmin\Desktop\SnakeGameDesktop\obj\Debug\net8.0-windows\SnakeGameDesktop.csproj.CoreCompileInputs.cache
+C:\Users\etezlcladmin\Desktop\SnakeGameDesktop\obj\Debug\net8.0-windows\SnakeGameDesktop.dll
+C:\Users\etezlcladmin\Desktop\SnakeGameDesktop\obj\Debug\net8.0-windows\refint\SnakeGameDesktop.dll
+C:\Users\etezlcladmin\Desktop\SnakeGameDesktop\obj\Debug\net8.0-windows\SnakeGameDesktop.pdb
+C:\Users\etezlcladmin\Desktop\SnakeGameDesktop\obj\Debug\net8.0-windows\SnakeGameDesktop.genruntimeconfig.cache
+C:\Users\etezlcladmin\Desktop\SnakeGameDesktop\obj\Debug\net8.0-windows\ref\SnakeGameDesktop.dll
