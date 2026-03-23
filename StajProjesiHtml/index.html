@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JWT ile API Güvenliği - ASP.NET Core Web API</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="hero">
+      <h1>JWT ile API Güvenliği</h1>
+      <p>
+        Bu çalışmada ASP.NET Core Web API projesinde, kullanıcı giriş yaptıktan sonra istemciye
+        JSON Web Token (JWT) verilerek sonraki isteklerde yetkilendirme yapılması amaçlanmıştır.
+        Böylece API uç noktaları daha güvenli hale getirilmiştir.
+      </p>
+    </div>
+
+    <div class="content">
+      <h2>1. Projenin Amacı</h2>
+      <div class="card">
+        Bu projenin temel amacı, kullanıcı doğrulama ve yetkilendirme işlemlerini token tabanlı
+        bir yapı ile güvenli şekilde gerçekleştirmektir. Kullanıcı sisteme giriş yaptıktan sonra
+        sunucu tarafından bir JWT oluşturulur. Kullanıcı daha sonra bu token'ı her istekte
+        göndererek korumalı API endpointlerine erişebilir.
+      </div>
+
+      <h2>2. Kullanılan Teknolojiler</h2>
+      <div class="grid">
+        <div class="mini">
+          <h3>ASP.NET Core Web API</h3>
+          <p>API geliştirme ve endpoint yönetimi için kullanılmıştır.</p>
+        </div>
+        <div class="mini">
+          <h3>JWT</h3>
+          <p>Kullanıcı doğrulama sonrası token üretmek için kullanılmıştır.</p>
+        </div>
+        <div class="mini">
+          <h3>Authentication / Authorization</h3>
+          <p>Kullanıcı kimlik kontrolü ve yetki denetimi için kullanılmıştır.</p>
+        </div>
+        <div class="mini">
+          <h3>Entity Framework Core</h3>
+          <p>Kullanıcı verilerini veritabanında saklamak için tercih edilmiştir.</p>
+        </div>
+      </div>
+
+      <h2>3. JWT Çalışma Mantığı</h2>
+      <div class="flow">
+        <div class="step">1. Kullanıcı giriş yapar</div>
+        <div class="step">2. Bilgiler sunucuda kontrol edilir</div>
+        <div class="step">3. Geçerliyse JWT üretilir</div>
+        <div class="step">4. Token istemciye gönderilir</div>
+        <div class="step">5. Sonraki isteklerde token header'a eklenir</div>
+        <div class="step">6. API token'ı doğrular</div>
+      </div>
+
+      <h2>4. Yapılan İşlemler</h2>
+      <div class="card">
+        <ul>
+          <li>Kullanıcı giriş işlemi için bir <code>login</code> endpointi oluşturuldu.</li>
+          <li>Doğru kullanıcı adı ve şifre girildiğinde JWT üretildi.</li>
+          <li><code>appsettings.json</code> içinde gizli anahtar, issuer ve audience bilgileri tanımlandı.</li>
+          <li><code>Program.cs</code> dosyasında JWT doğrulama ayarları yapıldı.</li>
+          <li><code>[Authorize]</code> attribute'u ile korumalı endpointler oluşturuldu.</li>
+          <li>İsteklerde <code>Authorization: Bearer TOKEN</code> yapısı kullanıldı.</li>
+        </ul>
+      </div>
+
+      <h2>5. appsettings.json Örneği</h2>
+      <pre>{
+  "Jwt": {
+    "Key": "BuBenimGizliAnahtarim12345",
+    "Issuer": "JwtDemoApi",
+    "Audience": "JwtDemoClient"
+  }
+}</pre>
+
+      <h2>6. Program.cs Yapılandırması</h2>
+      <pre>builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
+
+builder.Services.AddAuthorization();</pre>
+
+      <h2>7. Token Oluşturma Mantığı</h2>
+      <pre>var claims = new[]
+{
+    new Claim(ClaimTypes.Name, user.UserName),
+    new Claim(ClaimTypes.Role, "User")
+};
+
+var key = new SymmetricSecurityKey(
+    Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+
+var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+var token = new JwtSecurityToken(
+    issuer: _configuration["Jwt:Issuer"],
+    audience: _configuration["Jwt:Audience"],
+    claims: claims,
+    expires: DateTime.Now.AddMinutes(30),
+    signingCredentials: creds);
+
+return new JwtSecurityTokenHandler().WriteToken(token);</pre>
+
+      <h2>8. Korumalı Endpoint Örneği</h2>
+      <pre>[Authorize]
+[HttpGet("profil")]
+public IActionResult GetProfile()
+{
+    return Ok("Bu alana sadece token sahibi kullanıcı erişebilir.");
+}</pre>
+
+      <h2>9. Güvenlik Açısından Sağladığı Faydalar</h2>
+      <div class="grid">
+        <div class="mini">
+          <h3>Oturum Bilgisi Tutulmaz</h3>
+          <p>Sunucu tarafında session tutulmadan güvenli işlem yapılabilir.</p>
+        </div>
+        <div class="mini">
+          <h3>Rol Tabanlı Yetki</h3>
+          <p>Token içine rol bilgisi eklenerek farklı yetkiler verilebilir.</p>
+        </div>
+        <div class="mini">
+          <h3>Kolay Entegrasyon</h3>
+          <p>Web, mobil ve farklı istemcilerle rahat şekilde kullanılabilir.</p>
+        </div>
+      </div>
+
+      <h2>10. Sonuç</h2>
+      <div class="card">
+        Sonuç olarak JWT kullanımı, ASP.NET Core Web API projelerinde güvenli ve modern bir
+        kimlik doğrulama yöntemi sunmaktadır. Bu yapı sayesinde kullanıcı giriş yaptıktan sonra
+        her istek için tekrar tekrar giriş yapmasına gerek kalmadan güvenli bir şekilde sistemde
+        işlem yapabilmektedir. Özellikle REST API projelerinde JWT kullanımı oldukça yaygındır
+        ve pratik bir çözümdür.
+      </div>
+
+      <div class="note">
+        Not: Bu sayfa bilerek çok kurumsal değil, daha çok öğrenci ödevi / proje sunumu gibi sade
+        ve düzenli bir görünümde hazırlanmıştır.
+      </div>
+
+      <div class="footer">
+        Hazırlayan: Öğrenci Proje Sunumu<br />
+        Konu: ASP.NET Core Web API'de JWT ile Güvenlik
+      </div>
+    </div>
+  </div>
+</body>
+</html>
